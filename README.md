@@ -53,8 +53,8 @@ Using **lazy.nvim**:
       enable_default_keymaps = true,
       projects = {
         -- Add as many projects as you want
-        data_mining = project("~/edu/course1"),
-        enterprise_db = project("~/edu/course2"),
+        course1 = project("~/edu/course1"),
+        course2 = project("~/edu/course2"),
       },
     })
   end,
