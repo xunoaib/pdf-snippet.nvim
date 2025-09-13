@@ -24,13 +24,13 @@ function M.insert_pdf_snippet()
   vim.ui.select(vim.tbl_keys(M.config.projects), { prompt = "Select project:" }, function(choice)
     if not choice then return end
     local project = M.config.projects[choice]
-    local lectures_dir = vim.fn.expand(project.lectures)
+    local pdfs_dir = vim.fn.expand(project.pdfs)
     local outdir = vim.fn.expand(project.outdir)
 
     local telescope = require("telescope.builtin")
     telescope.find_files({
       prompt_title = "Select PDF",
-      cwd = lectures_dir,
+      cwd = pdfs_dir,
       find_command = { "fd", "--type", "f", "--extension", "pdf" },
       attach_mappings = function(_, map)
         local actions = require("telescope.actions")
