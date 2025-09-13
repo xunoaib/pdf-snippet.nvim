@@ -26,8 +26,8 @@ Using **lazy.nvim**:
     local function project(base)
       return {
         root   = base,
-        pdfs   = base .. "/lectures",
-        outdir = base .. "/notes/pdf_snippets",
+        pdfs   = base .. "/pdfs",
+        outdir = base .. "/extractions",
       }
     end
 
@@ -35,8 +35,8 @@ Using **lazy.nvim**:
       enable_default_keymaps = true,
       projects = {
         -- Add as many projects as you want
-        data_mining = project("~/edu/cis660_data_mining"),
-        enterprise_db = project("~/edu/cis611_enterprise_db"),
+        data_mining = project("~/edu/course1"),
+        enterprise_db = project("~/edu/course2"),
       },
     })
   end,
