@@ -1,9 +1,9 @@
--- This file runs automatically when the plugin is loaded
-vim.api.nvim_create_user_command("InsertPdfImage", function()
-  require("pdf_snippet").insert_pdf_image()
+-- User command
+vim.api.nvim_create_user_command("InsertPdfSnippet", function()
+  require("pdf_snippet").insert_pdf_snippet()
 end, {})
 
--- Optional keymap (can be overridden by user)
-vim.keymap.set("n", "<leader>pi", function()
-  require("pdf_snippet").insert_pdf_image()
-end, { desc = "Insert PDF Image" })
+-- Optional keymap
+vim.keymap.set("n", "<leader>ps", function()
+  require("pdf_snippet").insert_pdf_snippet()
+end, { desc = "Insert PDF Snippet" })
