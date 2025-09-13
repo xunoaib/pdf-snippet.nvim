@@ -14,6 +14,23 @@ direct visual snippets from your PDFs.
 - Inserts a Markdown image link at your cursor
 - Each image is named and annotated with the source PDF and page number
 
+## 🐍 Requirements
+
+- Python >= 3.10
+- Libraries:
+
+  ```bash
+  pip install -r python/requirements.txt
+  ```
+  (or manually: `pip install pdf2image pillow`)
+
+- System Dependency: [Poppler](https://poppler.freedesktop.org) (provides `pdftopp`/`pdftocairo`)
+
+    - Ubuntu: `sudo apt install poppler-utils`
+    - Arch: `sudo pacman -S poppler`
+    - macOS: `brew install poppler`
+    - Windows: download Poppler binaries and add them to your `PATH`
+
 ## 📦 Installation
 
 Using **lazy.nvim**:
@@ -21,13 +38,14 @@ Using **lazy.nvim**:
 ```lua
 {
   "xunoaib/pdf-snippet.nvim",
+  dependencies = { "nvim-telescope/telescope.nvim" },
   config = function()
-    -- Project directory structure helper. Tweak as needed.
+    -- Small helper for defining project directories
     local function project(base)
       return {
-        root   = base,
-        pdfs   = base .. "/pdfs",
-        outdir = base .. "/extractions",
+        root   = base,                   -- Project root
+        pdfs   = base .. "/pdfs",        -- PDF input directory
+        outdir = base .. "/extractions", -- PNG output directory
       }
     end
 
@@ -45,10 +63,24 @@ Using **lazy.nvim**:
 
 ## 🚀 Usage
 
-* Page extraction can be manually triggered with `:InsertPdfSnippet`
-* If `enable_default_keymaps = true`, `<leader>ps` will also trigger extraction.
-* You can also define your own keymap:
+* Run manually with:
 
-```lua
-vim.keymap.set("n", "<leader>ps", "<cmd>InsertPdfSnippet<cr>", { desc = "Insert PDF Snippet" })
-```
+  ```
+  :InsertPdfSnippet
+  ```
+* If `enable_default_keymaps = true`, use:
+
+  ```
+  <leader>ps
+  ```
+* Or define your own mapping:
+
+  ```lua
+  vim.keymap.set("n", "<leader>ps", "<cmd>InsertPdfSnippet<cr>", { desc = "Insert PDF Snippet" })
+  ```
+
+
+## ⚙️ Customization
+
+The conversion logic lives in [python/extract.py](python/extract.py).
+Edit this file to change options like DPI, scale factor, fonts, or annotation style.
