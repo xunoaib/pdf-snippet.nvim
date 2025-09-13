@@ -95,7 +95,9 @@ function M._insert_for_project(project)
 
             vim.cmd("stopinsert")
           end)
+          vim.schedule(function() vim.cmd("startinsert") end)
         end)
+        vim.schedule(function() vim.cmd("startinsert") end)
       end
 
       map("i", "<CR>", select_pdf)
