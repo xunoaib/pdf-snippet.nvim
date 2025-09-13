@@ -1,5 +1,4 @@
 import argparse
-import os
 from pathlib import Path
 
 from pdf2image import convert_from_path
@@ -7,37 +6,37 @@ from PIL import Image, ImageDraw, ImageFont
 
 
 def pdf_page_to_image(
-    pdf_path: str | Path,
+    pdf_path: Path,
     page_num: int,
-    output_path: str | Path,
+    output_path: Path,
     dpi: int = 200,
     scale: float = 0.5,
-    font_path: str = 'DejaVuSans.ttf',
+    font_path: str = "DejaVuSans.ttf",
     font_size: int = 20,
-):
-    '''
+) -> None:
+    """
     Convert a specific PDF page into a smaller image with text annotation.
-    '''
+    """
 
     pages = convert_from_path(
-        pdf_path, first_page=page_num, last_page=page_num, dpi=dpi
+        str(pdf_path), first_page=page_num, last_page=page_num, dpi=dpi
     )
-    image = pages[0].convert('RGBA')
+    image = pages[0].convert("RGBA")
 
     if scale != 1.0:
         image = image.resize(
             (int(image.width * scale), int(image.height * scale)),
-            Image.LANCZOS
+            Image.LANCZOS,
         )
 
-    pdf_name = os.path.basename(pdf_path)
-    text = f'{pdf_name} - Page {page_num}'
+    pdf_name = pdf_path.name
+    text = f"{pdf_name} - Page {page_num}"
 
     draw = ImageDraw.Draw(image)
     try:
         font = ImageFont.truetype(font_path, font_size)
     except Exception:
-        font = ImageFont.load_default(font_size)
+        font = ImageFont.load_default()
 
     bbox = draw.textbbox((0, 0), text, font=font)
     text_w, text_h = bbox[2] - bbox[0], bbox[3] - bbox[1]
@@ -46,53 +45,53 @@ def pdf_page_to_image(
     x = image.width - text_w - margin
     y = image.height - text_h - margin
 
+    # background rectangle for readability
     draw.rectangle(
         [(x - 5, y - 5), (x + text_w + 5, y + text_h + 5)],
-        fill=(200, 200, 200, 255)
+        fill=(200, 200, 200, 255),
     )
 
-    draw.text((x, y), text, font=font, fill='black')
+    draw.text((x, y), text, font=font, fill="black")
 
-    image.save(output_path, 'PNG')
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    image.save(output_path, "PNG")
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument('pdf', help='Path to PDF file')
-    parser.add_argument('page', type=int, help='1-based page number')
+    parser.add_argument("pdf", type=Path, help="Path to PDF file")
+    parser.add_argument("page", type=int, help="1-based page number")
     parser.add_argument(
-        '--outdir',
+        "--outdir",
         type=Path,
-        default=Path('.'),
-        help='Output directory for PNG (default: current directory)'
+        default=Path("."),
+        help="Output directory for PNG (default: current directory)",
     )
     parser.add_argument(
-        '--label',
+        "--label",
         type=str,
         default=None,
-        help='Custom link text for the markdown image (default: PDF file name)'
+        help="Custom link text for the markdown image (default: PDF file name)",
     )
     args = parser.parse_args()
 
-    pdf_input = Path(args.pdf)
-    page = args.page
+    pdf_input: Path = args.pdf.resolve()
+    page: int = args.page
+    outdir: Path = args.outdir.resolve()
 
-    args.outdir.mkdir(parents=True, exist_ok=True)
-
-    # assert args.outdir.exists(
-    # ), f'Output directory doesn't exist! {args.outdir}'
-
-    png_output = Path(args.outdir) / (pdf_input.stem + f'_page_{page}.png')
-
+    png_output = outdir / f"{pdf_input.stem}_page_{page}.png"
     pdf_page_to_image(pdf_input, page, png_output)
 
-    # Print path relative to output directory (fragile)
-    out = png_output.parent.name + '/' + png_output.name
+    # Safer relative path: make relative to cwd if possible
+    try:
+        rel_path = png_output.relative_to(Path.cwd())
+    except ValueError:
+        # fallback to absolute path if not inside cwd
+        rel_path = png_output
 
     label = args.label if args.label else pdf_input.name
+    print(f"![{label} - Page {page}]({rel_path.as_posix()})")
 
-    print(f'![{label} - Page {page}]({out})')
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
