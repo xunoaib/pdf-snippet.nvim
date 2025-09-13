@@ -16,29 +16,27 @@ direct visual snippets from your PDFs.
 
 ## 📦 Installation
 
-```lua
--- Helper function to define project paths
-local function pdf_snippet_project(base)
-  return {
-    root   = base,  -- Project root
-    pdfs   = base .. "/lectures",  -- PDF input directory
-    outdir = base .. "/notes/pdf_snippets",  -- Image output directory
-  }
-end
-```
-
 Using **lazy.nvim**:
 
 ```lua
 {
   "xunoaib/pdf-snippet.nvim",
   config = function()
+    -- Project directory structure helper. Tweak as needed.
+    local function project(base)
+      return {
+        root   = base,
+        pdfs   = base .. "/lectures",
+        outdir = base .. "/notes/pdf_snippets",
+      }
+    end
+
     require("pdf_snippet").setup({
       enable_default_keymaps = true,
       projects = {
         -- Add as many projects as you want
-        data_mining = pdf_snippet_project("~/edu/cis660_data_mining"),
-        enterprise_db = pdf_snippet_project("~/edu/cis611_enterprise_db"),
+        data_mining = project("~/edu/cis660_data_mining"),
+        enterprise_db = project("~/edu/cis611_enterprise_db"),
       },
     })
   end,
@@ -47,14 +45,8 @@ Using **lazy.nvim**:
 
 ## 🚀 Usage
 
-* Run the user command manually:
-
-```vim
-:InsertPdfSnippet
-```
-
-* If `enable_default_keymaps = true`, the plugin binds `<leader>ps` to `:InsertPdfSnippet`
-
+* Page extraction can be manually triggered with `:InsertPdfSnippet`
+* If `enable_default_keymaps = true`, `<leader>ps` will also trigger extraction.
 * You can also define your own keymap:
 
 ```lua
