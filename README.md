@@ -83,4 +83,5 @@ Using **lazy.nvim**:
 ## ⚙️ Customization
 
 The conversion logic lives in [python/extract.py](python/extract.py).
-Edit this file to change options like DPI, scale factor, fonts, or annotation style.
+
+Edit this file to change options like the Markdown link format, DPI, scale factor, fonts, or annotation style.
