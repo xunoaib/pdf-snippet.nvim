@@ -63,17 +63,17 @@ Using **lazy.nvim**:
 
 ## 🚀 Usage
 
-* Run manually with:
+- Run manually with:
 
   ```
   :InsertPdfSnippet
   ```
-* If `enable_default_keymaps = true`, use:
+- If `enable_default_keymaps = true`, use:
 
   ```
   <leader>ps
   ```
-* Or define your own mapping:
+- Or define your own mapping:
 
   ```lua
   vim.keymap.set("n", "<leader>ps", "<cmd>InsertPdfSnippet<cr>", { desc = "Insert PDF Snippet" })
