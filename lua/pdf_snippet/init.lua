@@ -13,7 +13,7 @@ function M.setup(opts)
   M.config = vim.tbl_deep_extend("force", M.config, opts or {})
 end
 
---- Detect which project applies based on current buffer's path
+--- Try to detect project from current buffer path
 local function detect_project()
   local buf_path = vim.fn.expand("%:p")
   for name, project in pairs(M.config.projects) do
@@ -25,6 +25,15 @@ local function detect_project()
   return nil
 end
 
+--- Let user pick a project manually
+local function select_project(callback)
+  vim.ui.select(vim.tbl_keys(M.config.projects), { prompt = "Select project:" }, function(choice)
+    if not choice then return end
+    callback(M.config.projects[choice])
+  end)
+end
+
+--- Main entry
 function M.insert_pdf_snippet()
   if vim.tbl_isempty(M.config.projects) then
     vim.notify("pdf-snippet: no projects configured", vim.log.levels.ERROR)
@@ -33,12 +42,17 @@ function M.insert_pdf_snippet()
 
   local project = detect_project()
   if not project then
-    vim.notify("pdf-snippet: no matching project found for current buffer", vim.log.levels.WARN)
-    -- fallback to manual selection if you want:
-    -- return M.select_project()
-    return
+    -- fallback
+    return select_project(function(p)
+      M._insert_for_project(p)
+    end)
   end
 
+  return M._insert_for_project(project)
+end
+
+--- Core implementation for a given project
+function M._insert_for_project(project)
   local pdfs_dir = vim.fn.expand(project.pdfs)
   local outdir = vim.fn.expand(project.outdir)
 
