@@ -16,8 +16,6 @@ direct visual snippets from your PDFs.
 
 ## 📦 Installation
 
-Using **lazy.nvim**:
-
 ```lua
 -- Helper function to define project paths
 local function pdf_snippet_project(base)
@@ -29,11 +27,14 @@ local function pdf_snippet_project(base)
 end
 ```
 
+Using **lazy.nvim**:
+
 ```lua
 {
   "xunoaib/pdf-snippet.nvim",
   config = function()
     require("pdf_snippet").setup({
+      enable_default_keymaps = true,
       projects = {
         -- Add as many projects as you want
         data_mining = pdf_snippet_project("~/edu/cis660_data_mining"),
@@ -42,4 +43,20 @@ end
     })
   end,
 }
+```
+
+## 🚀 Usage
+
+* Run the user command manually:
+
+```vim
+:InsertPdfSnippet
+```
+
+* If `enable_default_keymaps = true`, the plugin binds `<leader>ps` to `:InsertPdfSnippet`
+
+* You can also define your own keymap:
+
+```lua
+vim.keymap.set("n", "<leader>ps", "<cmd>InsertPdfSnippet<cr>", { desc = "Insert PDF Snippet" })
 ```
