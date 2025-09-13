@@ -99,7 +99,16 @@ function M._insert_for_project(project)
 
             local row = vim.api.nvim_win_get_cursor(0)[1]
             local buf = vim.api.nvim_get_current_buf()
+
+            -- insert below current line
             vim.api.nvim_buf_set_lines(buf, row, row, false, lines)
+
+            -- move cursor to start of first inserted line
+            vim.api.nvim_win_set_cursor(0, { row + 1, 0 })
+
+            -- -- move cursor after the snippet text
+            -- local new_line = lines[#lines] or ""
+            -- vim.api.nvim_win_set_cursor(0, { row + #lines, #new_line })
 
             vim.cmd("stopinsert")
           end)
