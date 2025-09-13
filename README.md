@@ -1,10 +1,12 @@
-# pdf-snippet.nvim
+# ✂️ pdf-snippet.nvim
 
-**pdf-snippet.nvim** is a Neovim plugin for quickly extracting pages from PDFs
-as images and inserting them into your notes with a Markdown link.
+**pdf-snippet.nvim** is a Neovim plugin that lets you grab pages from PDFs and
+drop them straight into your notes as images -- complete with an annotation
+and Markdown link back to the source.
 
-Perfect for lecture notes, research annotations, or any workflow where you want
-direct visual snippets from your PDFs.
+It's perfect for lecture notes, research annotations, or any workflow where
+you want quick, visual snippets from your PDFs without breaking your writing
+flow.
 
 ## ✨ Features
 
