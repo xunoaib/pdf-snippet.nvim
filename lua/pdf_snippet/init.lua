@@ -82,10 +82,19 @@ function M._insert_for_project(project)
         local pdf_name = vim.fn.fnamemodify(pdf, ":t")
 
         vim.ui.input({ prompt = "Page number: " }, function(page)
-          if not page or page == "" then return end
+          if not page or page == "" then
+            vim.schedule(function() vim.cmd("stopinsert") end)
+            return
+          end
           vim.schedule(function() vim.cmd("startinsert") end)
 
-          vim.ui.input({ prompt = "Label (optional): ", default = pdf_name }, function(label)
+          vim.ui.input({ prompt = "Label: ", default = pdf_name }, function(label)
+            if not label then
+              vim.schedule(function() vim.cmd("stopinsert") end)
+              return
+            end
+            vim.schedule(function() vim.cmd("startinsert") end)
+
             local cmd = {
               "python3", M.config.script, pdf, page,
               "--outdir", outdir,
