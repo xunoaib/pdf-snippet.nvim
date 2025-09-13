@@ -4,6 +4,7 @@ local M = {}
 local plugin_root = vim.fn.fnamemodify(debug.getinfo(1, "S").source:sub(2), ":h:h:h")
 
 M.config = {
+  enable_default_keymaps = true,
   projects = {}, -- user defines projects
   script = plugin_root .. "/python/extract.py",
 }
@@ -11,6 +12,13 @@ M.config = {
 --- Setup user configuration
 function M.setup(opts)
   M.config = vim.tbl_deep_extend("force", M.config, opts or {})
+
+  -- define default keymap here
+  if M.config.enable_default_keymaps then
+    vim.keymap.set("n", "<leader>ps", function()
+      require("pdf_snippet").insert_pdf_snippet()
+    end, { desc = "Insert PDF Snippet" })
+  end
 end
 
 --- Try to detect project from current buffer path
