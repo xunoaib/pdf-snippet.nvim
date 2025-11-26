@@ -119,7 +119,7 @@ function M._insert_for_project(project)
             -- local new_line = lines[#lines] or ""
             -- vim.api.nvim_win_set_cursor(0, { row + #lines, #new_line })
 
-            vim.cmd("stopinsert")
+            vim.schedule(function() vim.cmd("stopinsert") end)
           end)
           vim.schedule(function() vim.cmd("startinsert") end)
         end)
