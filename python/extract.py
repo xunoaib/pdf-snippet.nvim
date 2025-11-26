@@ -90,7 +90,15 @@ def main() -> None:
         rel_path = png_output
 
     label = args.label if args.label else pdf_input.name
-    print(f"![{label} - Page {page}]({rel_path.as_posix()})")
+    enc_path = markdown_encode(rel_path.as_posix())
+    print(f"![{label} - Page {page}]({enc_path})")
+
+
+def markdown_encode(path: str):
+    path = path.replace(' ', '%20')
+    path = path.replace('(', '%28')
+    path = path.replace(')', '%29')
+    return path
 
 
 if __name__ == "__main__":
